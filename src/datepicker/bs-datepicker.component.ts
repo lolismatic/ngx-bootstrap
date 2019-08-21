@@ -69,8 +69,15 @@ export class BsDatepickerDirective implements OnInit, OnDestroy, OnChanges {
     if (this._bsValue === value) {
       return;
     }
-    this._bsValue = value;
-    this.bsValueChange.emit(value);
+    let date = value;
+
+    if (date) {
+      const timezoneOffset = value.getTimezoneOffset() * 60000;
+      date = new Date(value.getTime() + timezoneOffset);
+    }
+
+    this._bsValue = date;
+    this.bsValueChange.emit(date);
   }
 
   /**

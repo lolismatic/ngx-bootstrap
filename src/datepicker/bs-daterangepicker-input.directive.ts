@@ -153,8 +153,12 @@ export class BsDaterangepickerInputDirective
 
 
       this._value = (_input as string[])
-        .map((_val: string): Date =>
-          parseDate(_val, this._picker._config.dateInputFormat, this._localeService.currentLocale))
+        .map((_val: string): Date => {
+          const date = parseDate(_val, this._picker._config.dateInputFormat, this._localeService.currentLocale);
+          const timezoneOffset: number = date.getTimezoneOffset() * 60000;
+
+          return new Date(Number(date.getTime()) + timezoneOffset);
+        })
         .map((date: Date) => (isNaN(date.valueOf()) ? null : date));
     }
 

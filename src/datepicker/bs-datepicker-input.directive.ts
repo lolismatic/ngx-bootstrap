@@ -136,10 +136,17 @@ export class BsDatepickerInputDirective
           `Locale "${_localeKey}" is not defined, please add it with "defineLocale(...)"`
         );
       }
-      this._value = parseDate(value, this._picker._config.dateInputFormat, this._localeService.currentLocale);
+
+      const date = parseDate(value, this._picker._config.dateInputFormat, this._localeService.currentLocale);
+      this._picker.bsValue = date;
+
+      const timezoneOffset = date.getTimezoneOffset() * 60000;
+      this._value = new Date(Number(date.getTime()) + timezoneOffset);
+
+      return;
     }
 
-    this._picker.bsValue = this._value;
+    this._picker.bsValue = null;
   }
 
   setDisabledState(isDisabled: boolean): void {
